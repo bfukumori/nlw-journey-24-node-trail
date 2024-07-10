@@ -1,0 +1,70 @@
+
+# @name getTrips
+GET http://localhost:3333/trips HTTP/1.1
+
+###
+
+# @name createTrip
+POST http://localhost:3333/trips HTTP/1.1
+content-type: application/json
+
+{
+    "destination": "Santa Catarina",
+    "starts_at": "2024-07-20 13:00",
+    "ends_at": "2024-07-30 13:00",
+    "owner_name":"Bruno Fukumori",
+    "owner_email":"brunofukumori@gmail.com",
+    "emails_to_invite": ["person1@test.com","person2@test.com"]
+}
+
+###
+# @name confirmTrip
+@tripId = {{createTrip.response.body.tripId}}
+
+GET http://localhost:3333/trips/{{tripId}}/confirm HTTP/1.1
+
+###
+
+# @name confirmParticipant
+@participantId = {{getTrips.response.body.trips[0].participants[1].id}}
+GET http://localhost:3333/participants/{{participantId}}/confirm HTTP/1.1
+
+###
+
+# @name createActivity
+@tripId = {{createTrip.response.body.tripId}}
+
+POST http://localhost:3333/trips/{{tripId}}/activities HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Santa Catarina",
+    "occurs_at": "2024-07-28 12:00"
+}
+
+###
+
+# @name getActivities
+@tripId = {{createTrip.response.body.tripId}}
+
+GET http://localhost:3333/trips/{{tripId}}/activities HTTP/1.1
+
+###
+
+# @name createLink
+@tripId = {{createTrip.response.body.tripId}}
+
+POST http://localhost:3333/trips/{{tripId}}/links HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Santa Catarina",
+    "url": "https://www.santacatarina.com.br"
+}
+
+###
+
+# @name getLinks
+@tripId = {{createTrip.response.body.tripId}}
+
+GET http://localhost:3333/trips/{{tripId}}/links HTTP/1.1

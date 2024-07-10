@@ -1,0 +1,38 @@
+{
+  "name": "planner",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch --env-file=.env src/server.ts",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
+  },
+  "keywords": [
+    "nlw",
+    "node",
+    "rocketseat"
+  ],
+  "author": "Burno Fukumori",
+  "license": "ISC",
+  "description": "Backend do app de planejamento de viagens da trilha de Node do NLW da Rocketseat",
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "@types/nodemailer": "^6.4.15",
+    "@vitest/coverage-v8": "^2.0.1",
+    "prisma": "^5.16.1",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.3",
+    "vite-tsconfig-paths": "^4.3.2",
+    "vitest": "^2.0.1"
+  },
+  "dependencies": {
+    "@fastify/cors": "^9.0.1",
+    "@prisma/client": "^5.16.1",
+    "dayjs": "^1.11.11",
+    "fastify": "^4.28.1",
+    "fastify-type-provider-zod": "^2.0.0",
+    "nodemailer": "^6.9.14",
+    "zod": "^3.23.8"
+  }
+}
