@@ -1,13 +1,13 @@
 import { ParticipantAlreadyConfirmed } from '@/errors/ParticipantAlreadyConfirmed.js';
 import { ParticipantNotFound } from '@/errors/ParticipantNotFound.js';
-import { Participant } from '@/repositories/dtos/listTripsDTO.js';
-import { ITripRepository } from '@/repositories/interfaces/ITripRepository.js';
+import { Participant } from '@/repositories/dtos/getParticipantsDTO.js';
+import { IParticipantRepository } from '@/repositories/interfaces/IParticipantRepository.js';
 
 export class ConfirmParticipantUseCase {
-  constructor(private readonly tripRepository: ITripRepository) {}
+  constructor(private readonly participantRepository: IParticipantRepository) {}
 
   async execute(participantId: string): Promise<Participant> {
-    const participant = await this.tripRepository.findParticipantById(
+    const participant = await this.participantRepository.findParticipantById(
       participantId
     );
 
@@ -19,7 +19,7 @@ export class ConfirmParticipantUseCase {
       throw new ParticipantAlreadyConfirmed();
     }
 
-    await this.tripRepository.confirmParticipant(participantId);
+    await this.participantRepository.confirmParticipant(participantId);
 
     return participant;
   }

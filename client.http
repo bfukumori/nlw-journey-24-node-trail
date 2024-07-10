@@ -1,9 +1,3 @@
-
-# @name getTrips
-GET http://localhost:3333/trips HTTP/1.1
-
-###
-
 # @name createTrip
 POST http://localhost:3333/trips HTTP/1.1
 content-type: application/json
@@ -12,27 +6,47 @@ content-type: application/json
     "destination": "Santa Catarina",
     "starts_at": "2024-07-20 13:00",
     "ends_at": "2024-07-30 13:00",
-    "owner_name":"Bruno Fukumori",
-    "owner_email":"brunofukumori@gmail.com",
+    "owner_name":"John Doe",
+    "owner_email":"johndoe@test.com",
     "emails_to_invite": ["person1@test.com","person2@test.com"]
 }
 
 ###
+
+# @name getTrips
+GET http://localhost:3333/trips HTTP/1.1
+
+###
+
+# @name getTripDetails
+@tripId = {{getTrips.response.body.trips[0].id}}
+GET http://localhost:3333/trips/{{tripId}} HTTP/1.1
+
+###
+
 # @name confirmTrip
-@tripId = {{createTrip.response.body.tripId}}
+@tripId = {{getTrips.response.body.trips[0].id}}
 
 GET http://localhost:3333/trips/{{tripId}}/confirm HTTP/1.1
 
 ###
 
-# @name confirmParticipant
-@participantId = {{getTrips.response.body.trips[0].participants[1].id}}
-GET http://localhost:3333/participants/{{participantId}}/confirm HTTP/1.1
+# @name updateTrip
+@tripId = {{getTrips.response.body.trips[0].id}}
+
+PUT http://localhost:3333/trips/{{tripId}} HTTP/1.1
+content-type: application/json
+
+{
+    "destination": "São Paulo",
+    "starts_at": "2024-07-21 12:00",
+    "ends_at": "2024-07-25 12:00"
+}
 
 ###
 
 # @name createActivity
-@tripId = {{createTrip.response.body.tripId}}
+@tripId = {{getTrips.response.body.trips[0].id}}
 
 POST http://localhost:3333/trips/{{tripId}}/activities HTTP/1.1
 content-type: application/json
@@ -45,14 +59,14 @@ content-type: application/json
 ###
 
 # @name getActivities
-@tripId = {{createTrip.response.body.tripId}}
+@tripId = {{getTrips.response.body.trips[0].id}}
 
 GET http://localhost:3333/trips/{{tripId}}/activities HTTP/1.1
 
 ###
 
 # @name createLink
-@tripId = {{createTrip.response.body.tripId}}
+@tripId = {{getTrips.response.body.trips[0].id}}
 
 POST http://localhost:3333/trips/{{tripId}}/links HTTP/1.1
 content-type: application/json
@@ -65,6 +79,38 @@ content-type: application/json
 ###
 
 # @name getLinks
-@tripId = {{createTrip.response.body.tripId}}
+@tripId = {{getTrips.response.body.trips[0].id}}
 
 GET http://localhost:3333/trips/{{tripId}}/links HTTP/1.1
+
+###
+
+# @name getParticipants
+@tripId = {{getTrips.response.body.trips[0].id}}
+
+GET http://localhost:3333/trips/{{tripId}}/participants HTTP/1.1
+
+###
+
+# @name getParticipantDetails
+@participantId = {{getParticipants.response.body.participants[0].id}}
+
+GET http://localhost:3333/participants/{{participantId}} HTTP/1.1
+
+###
+
+# @name confirmParticipant
+@participantId = {{getTrips.response.body.trips[0].participants[1].id}}
+GET http://localhost:3333/participants/{{participantId}}/confirm HTTP/1.1
+
+###
+
+# @name createInvite
+@tripId = {{getTrips.response.body.trips[0].id}}
+
+POST http://localhost:3333/trips/{{tripId}}/invites HTTP/1.1
+content-type: application/json
+
+{
+    "email": "johndoe@test.com"
+}

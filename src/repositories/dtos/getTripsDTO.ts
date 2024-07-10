@@ -1,11 +1,4 @@
-export type Participant = {
-  id: string;
-  name?: string | null;
-  email: string;
-  isConfirmed: boolean;
-  isOwner: boolean;
-  tripId: string;
-};
+import { Participant } from './getParticipantsDTO.js';
 
 export type Trip = {
   id: string;

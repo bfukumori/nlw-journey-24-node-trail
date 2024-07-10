@@ -1,16 +1,17 @@
 import { randomUUID } from 'node:crypto';
+
+import {
+  CreateActivityDTORequest,
+  CreateActivityDTOResponse,
+} from '../dtos/createActivityDTO.js';
 import {
   Activity,
   GetActivitiesDTOResponse,
 } from '../dtos/getActivitiesDTO.js';
 import { IActivityRepository } from '../interfaces/IActivityRepository.js';
-import {
-  CreateActivityDTORequest,
-  CreateActivityDTOResponse,
-} from '../dtos/createActivityDTO.js';
 
 export class InMemoryActivityRepository implements IActivityRepository {
-  private activities: Activity[] = [];
+  public activities: Activity[] = [];
 
   async createActivity({
     occursAt,

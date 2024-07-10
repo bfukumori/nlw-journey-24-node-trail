@@ -1,8 +1,8 @@
 import { TripNotFound } from '@/errors/TripNotFound.js';
+import { dayjs } from '@/lib/dayjs.js';
 import { GetActivitiesDTOGroupedByDate } from '@/repositories/dtos/getActivitiesDTO.js';
 import { IActivityRepository } from '@/repositories/interfaces/IActivityRepository.js';
 import { ITripRepository } from '@/repositories/interfaces/ITripRepository.js';
-import { dayjs } from '@/lib/dayjs.js';
 
 export class GetActivitiesUseCase {
   constructor(

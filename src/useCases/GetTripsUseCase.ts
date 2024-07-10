@@ -5,8 +5,8 @@ export class GetTripsUseCase {
   constructor(private readonly tripRepository: ITripRepository) {}
 
   async execute(page?: number): Promise<GetTripsDTOResponse> {
-    const result = await this.tripRepository.getTrips(page);
+    const trips = await this.tripRepository.getTrips(page);
 
-    return result;
+    return trips;
   }
 }

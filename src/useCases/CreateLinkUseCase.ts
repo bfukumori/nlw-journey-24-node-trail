@@ -23,12 +23,12 @@ export class CreateLinkUseCase {
       throw new TripNotFound();
     }
 
-    const { linkId } = await this.linkRepository.createLink({
+    const linkId = await this.linkRepository.createLink({
       title,
       url,
       tripId,
     });
 
-    return { linkId };
+    return linkId;
   }
 }

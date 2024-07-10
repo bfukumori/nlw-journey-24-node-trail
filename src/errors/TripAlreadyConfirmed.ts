@@ -1,4 +1,6 @@
-export class TripAlreadyConfirmed extends Error {
+import { ClientError } from './client-error.js';
+
+export class TripAlreadyConfirmed extends ClientError {
   code: number;
 
   constructor() {

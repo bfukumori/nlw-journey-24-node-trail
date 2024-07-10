@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { InvalidDate } from '@/errors/InvalidDate.js';
 import { CreateTripDTORequest } from '@/repositories/dtos/createTripDTO.js';
 import { InMemoryTripRepository } from '@/repositories/in-memory/InMemoryTripRepository.js';
@@ -15,14 +16,14 @@ describe('CreateTripUseCase', () => {
 
     vi.useFakeTimers();
 
-    const date = new Date(2024, 6, 8, 19);
+    const date = new Date(2024, 6, 9, 12);
 
     vi.setSystemTime(date);
 
     createTripDTO = {
       destination: 'São Paulo',
-      startsAt: new Date('2024-07-10'),
-      endsAt: new Date('2024-07-11'),
+      startsAt: new Date(2024, 6, 10, 12),
+      endsAt: new Date(2024, 6, 20, 12),
       ownerName: 'John Doe',
       ownerEmail: 'johndoe@test.com',
       emailsToInvite: ['johndoe@test.com'],
@@ -40,7 +41,7 @@ describe('CreateTripUseCase', () => {
   });
 
   it('should not be able to create a new trip with invalid start date', async () => {
-    createTripDTO.startsAt = new Date('2024-06-10');
+    createTripDTO.startsAt = new Date(2024, 6, 8, 12);
 
     await expect(() => sut.execute(createTripDTO)).rejects.toBeInstanceOf(
       InvalidDate
@@ -48,7 +49,7 @@ describe('CreateTripUseCase', () => {
   });
 
   it('should not be able to create a new trip with invalid end date', async () => {
-    createTripDTO.endsAt = new Date('2024-06-11');
+    createTripDTO.endsAt = new Date(2024, 6, 8, 12);
 
     await expect(() => sut.execute(createTripDTO)).rejects.toBeInstanceOf(
       InvalidDate

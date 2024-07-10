@@ -1,53 +1,42 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
+
 import { InvalidDate } from '@/errors/InvalidDate.js';
+import { TripNotFound } from '@/errors/TripNotFound.js';
+import { makeTripsInMemoryFactory } from '@/factories/in-memory/makeTripsInMemoryFactory.ts.js';
 import { CreateActivityDTORequest } from '@/repositories/dtos/createActivityDTO.js';
+import { InMemoryActivityRepository } from '@/repositories/in-memory/InMemoryActivityRepository.js';
+import { InMemoryParticipantRepository } from '@/repositories/in-memory/InMemoryParticipantRepository.js';
 import { InMemoryTripRepository } from '@/repositories/in-memory/InMemoryTripRepository.js';
 import { CreateActivityUseCase } from './CreateActivityUseCase.js';
-import { CreateTripDTORequest } from '@/repositories/dtos/createTripDTO.js';
-import { InMemoryActivityRepository } from '@/repositories/in-memory/InMemoryActivityRepository.js';
-import { TripNotFound } from '@/errors/TripNotFound.js';
 
 let inMemoryTripRepository: InMemoryTripRepository;
+let inMemoryParticipantRepository: InMemoryParticipantRepository;
 let inMemoryActivityRepository: InMemoryActivityRepository;
 let sut: CreateActivityUseCase;
 let createActivityDTO: CreateActivityDTORequest;
-let createTripDTO: CreateTripDTORequest;
 
 describe('CreateActivityUseCase', () => {
   beforeEach(async () => {
     inMemoryTripRepository = new InMemoryTripRepository();
+    inMemoryParticipantRepository = new InMemoryParticipantRepository();
     inMemoryActivityRepository = new InMemoryActivityRepository();
     sut = new CreateActivityUseCase(
       inMemoryTripRepository,
       inMemoryActivityRepository
     );
 
-    vi.useFakeTimers();
+    const { tripsData } = await makeTripsInMemoryFactory(
+      inMemoryTripRepository,
+      inMemoryParticipantRepository
+    );
 
-    const date = new Date(2024, 6, 8, 19);
-
-    vi.setSystemTime(date);
-
-    createTripDTO = {
-      destination: 'São Paulo',
-      startsAt: new Date('2024-07-10'),
-      endsAt: new Date('2024-07-17'),
-      ownerName: 'John Doe',
-      ownerEmail: 'johndoe@test.com',
-      emailsToInvite: ['johndoe@test.com'],
-    };
-
-    const { tripId } = await inMemoryTripRepository.createTrip(createTripDTO);
+    const { startsAt, id: tripId } = tripsData[0];
 
     createActivityDTO = {
       title: 'Visit the museum',
-      occursAt: new Date('2024-07-10'),
+      occursAt: startsAt,
       tripId,
     };
-  });
-
-  afterEach(() => {
-    vi.useRealTimers();
   });
 
   it('should be able to create an activity for a trip', async () => {
@@ -65,7 +54,7 @@ describe('CreateActivityUseCase', () => {
   });
 
   it('should not be able to create an activity before trip start date', async () => {
-    createActivityDTO.occursAt = new Date('2024-07-09');
+    createActivityDTO.occursAt = new Date(2024, 6, 9, 12);
 
     await expect(() => sut.execute(createActivityDTO)).rejects.toBeInstanceOf(
       InvalidDate
@@ -73,7 +62,7 @@ describe('CreateActivityUseCase', () => {
   });
 
   it('should not be able to create an activity after trip end date', async () => {
-    createActivityDTO.occursAt = new Date('2024-07-18');
+    createActivityDTO.occursAt = new Date(2024, 6, 21, 12);
 
     await expect(() => sut.execute(createActivityDTO)).rejects.toBeInstanceOf(
       InvalidDate

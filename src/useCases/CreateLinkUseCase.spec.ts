@@ -1,43 +1,31 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { InMemoryTripRepository } from '@/repositories/in-memory/InMemoryTripRepository.js';
-import { CreateTripDTORequest } from '@/repositories/dtos/createTripDTO.js';
+import { beforeEach, describe, expect, it } from 'vitest';
+
 import { TripNotFound } from '@/errors/TripNotFound.js';
-import { CreateLinkUseCase } from './CreateLinkUseCase.js';
+import { makeTripsInMemoryFactory } from '@/factories/in-memory/makeTripsInMemoryFactory.ts.js';
 import { InMemoryLinkRepository } from '@/repositories/in-memory/InMemoryLinkRepository.js';
+import { InMemoryParticipantRepository } from '@/repositories/in-memory/InMemoryParticipantRepository.js';
+import { InMemoryTripRepository } from '@/repositories/in-memory/InMemoryTripRepository.js';
+import { CreateLinkUseCase } from './CreateLinkUseCase.js';
 
 let inMemoryTripRepository: InMemoryTripRepository;
+let inMemoryParticipantRepository: InMemoryParticipantRepository;
 let inMemoryLinkRepository: InMemoryLinkRepository;
 let sut: CreateLinkUseCase;
-let createTripDTO: CreateTripDTORequest;
 
 describe('CreateLinkUseCase', () => {
   beforeEach(async () => {
     inMemoryTripRepository = new InMemoryTripRepository();
+    inMemoryParticipantRepository = new InMemoryParticipantRepository();
     inMemoryLinkRepository = new InMemoryLinkRepository();
     sut = new CreateLinkUseCase(inMemoryTripRepository, inMemoryLinkRepository);
-
-    vi.useFakeTimers();
-
-    const date = new Date(2024, 6, 8, 19);
-
-    vi.setSystemTime(date);
-
-    createTripDTO = {
-      destination: 'São Paulo',
-      startsAt: new Date('2024-07-10'),
-      endsAt: new Date('2024-07-17'),
-      ownerName: 'John Doe',
-      ownerEmail: 'johndoe@test.com',
-      emailsToInvite: ['johndoe@test.com'],
-    };
-  });
-
-  afterEach(() => {
-    vi.useRealTimers();
   });
 
   it('should be able to create a link for a trip', async () => {
-    const { tripId } = await inMemoryTripRepository.createTrip(createTripDTO);
+    const { tripsData } = await makeTripsInMemoryFactory(
+      inMemoryTripRepository,
+      inMemoryParticipantRepository
+    );
+    const tripId = tripsData[0].id;
 
     const createLinkDTO = {
       tripId,

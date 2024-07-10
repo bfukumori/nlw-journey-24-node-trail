@@ -1,6 +1,7 @@
 import { FastifyInstance } from 'fastify';
-import { z } from 'zod';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
+import { z } from 'zod';
+
 import { makeGetTripsUseCase } from '@/factories/makeGetTripsUseCase.js';
 
 export async function getTrips(fastify: FastifyInstance) {

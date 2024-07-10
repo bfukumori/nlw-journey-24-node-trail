@@ -1,39 +1,26 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { CreateTripDTORequest } from '@/repositories/dtos/createTripDTO.js';
+import { beforeEach, describe, expect, it } from 'vitest';
+
+import { makeTripsInMemoryFactory } from '@/factories/in-memory/makeTripsInMemoryFactory.ts.js';
+import { InMemoryParticipantRepository } from '@/repositories/in-memory/InMemoryParticipantRepository.js';
 import { InMemoryTripRepository } from '@/repositories/in-memory/InMemoryTripRepository.js';
 import { GetTripsUseCase } from './GetTripsUseCase.js';
 
 let inMemoryTripRepository: InMemoryTripRepository;
+let inMemoryParticipantRepository: InMemoryParticipantRepository;
 let sut: GetTripsUseCase;
-let createTripDTO: CreateTripDTORequest;
 
 describe('GetTripsUseCase', () => {
   beforeEach(async () => {
     inMemoryTripRepository = new InMemoryTripRepository();
+    inMemoryParticipantRepository = new InMemoryParticipantRepository();
     sut = new GetTripsUseCase(inMemoryTripRepository);
 
-    vi.useFakeTimers();
-
-    const date = new Date(2024, 6, 8, 19);
-
-    vi.setSystemTime(date);
-
-    createTripDTO = {
-      destination: 'São Paulo',
-      startsAt: new Date('2024-07-10'),
-      endsAt: new Date('2024-07-11'),
-      ownerName: 'John Doe',
-      ownerEmail: 'johndoe@test.com',
-      emailsToInvite: ['johndoe@test.com'],
-    };
-
     for (let i = 0; i < 12; i++) {
-      await inMemoryTripRepository.createTrip(createTripDTO);
+      await makeTripsInMemoryFactory(
+        inMemoryTripRepository,
+        inMemoryParticipantRepository
+      );
     }
-  });
-
-  afterEach(() => {
-    vi.useRealTimers();
   });
 
   it('should be able to list all trips', async () => {

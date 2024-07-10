@@ -1,4 +1,6 @@
-export class InvalidDate extends Error {
+import { ClientError } from './client-error.js';
+
+export class InvalidDate extends ClientError {
   code: number;
 
   constructor(message: string) {

@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma.js';
-import { ITripRepository } from '../interfaces/ITripRepository.js';
 import { CreateTripDTORequest } from '../dtos/createTripDTO.js';
+import { UpdateTripDTORequest } from '../dtos/updateTripDTO.js';
+import { ITripRepository } from '../interfaces/ITripRepository.js';
 
 export class PrismaTripRepository implements ITripRepository {
   async createTrip({
@@ -44,7 +45,14 @@ export class PrismaTripRepository implements ITripRepository {
       skip: (page - 1) * 10,
       take: 10,
       include: {
-        participants: true,
+        participants: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            is_owner: true,
+          },
+        },
       },
     });
 
@@ -60,9 +68,7 @@ export class PrismaTripRepository implements ITripRepository {
           id: participant.id,
           name: participant.name,
           email: participant.email,
-          isConfirmed: participant.is_confirmed,
           isOwner: participant.is_owner,
-          tripId: participant.trip_id,
         })),
       })),
       total: await prisma.trip.count(),
@@ -112,35 +118,21 @@ export class PrismaTripRepository implements ITripRepository {
     };
   }
 
-  async confirmParticipant(participantId: string): Promise<void> {
-    await prisma.participant.update({
+  async updateTrip({
+    destination,
+    endsAt,
+    startsAt,
+    tripId,
+  }: UpdateTripDTORequest): Promise<void> {
+    await prisma.trip.update({
       where: {
-        id: participantId,
+        id: tripId,
       },
       data: {
-        is_confirmed: true,
+        destination,
+        starts_at: startsAt,
+        ends_at: endsAt,
       },
     });
-  }
-
-  async findParticipantById(participantId: string) {
-    const participant = await prisma.participant.findUnique({
-      where: {
-        id: participantId,
-      },
-    });
-
-    if (!participant) {
-      return null;
-    }
-
-    return {
-      id: participant.id,
-      name: participant.name,
-      email: participant.email,
-      isConfirmed: participant.is_confirmed,
-      isOwner: participant.is_owner,
-      tripId: participant.trip_id,
-    };
   }
 }

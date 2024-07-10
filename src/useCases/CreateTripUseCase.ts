@@ -25,7 +25,7 @@ export class CreateTripUseCase {
       throw new InvalidDate('Invalid trip end date');
     }
 
-    const { tripId } = await this.tripRepository.createTrip({
+    const tripId = await this.tripRepository.createTrip({
       destination,
       startsAt,
       endsAt,
@@ -34,6 +34,6 @@ export class CreateTripUseCase {
       emailsToInvite,
     });
 
-    return { tripId };
+    return tripId;
   }
 }

@@ -1,41 +1,29 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
+
+import { TripAlreadyConfirmed } from '@/errors/TripAlreadyConfirmed.js';
 import { TripNotFound } from '@/errors/TripNotFound.js';
-import { CreateTripDTORequest } from '@/repositories/dtos/createTripDTO.js';
+import { makeTripsInMemoryFactory } from '@/factories/in-memory/makeTripsInMemoryFactory.ts.js';
+import { InMemoryParticipantRepository } from '@/repositories/in-memory/InMemoryParticipantRepository.js';
 import { InMemoryTripRepository } from '@/repositories/in-memory/InMemoryTripRepository.js';
 import { ConfirmTripUseCase } from './ConfirmTripUseCase.js';
-import { TripAlreadyConfirmed } from '@/errors/TripAlreadyConfirmed.js';
 
 let inMemoryTripRepository: InMemoryTripRepository;
+let inMemoryParticipantRepository: InMemoryParticipantRepository;
 let sut: ConfirmTripUseCase;
-let createTripDTO: CreateTripDTORequest;
 
 describe('ConfirmTripUseCase', () => {
   beforeEach(() => {
     inMemoryTripRepository = new InMemoryTripRepository();
+    inMemoryParticipantRepository = new InMemoryParticipantRepository();
     sut = new ConfirmTripUseCase(inMemoryTripRepository);
-
-    vi.useFakeTimers();
-
-    const date = new Date(2024, 6, 8, 19);
-
-    vi.setSystemTime(date);
-
-    createTripDTO = {
-      destination: 'São Paulo',
-      startsAt: new Date('2024-07-10'),
-      endsAt: new Date('2024-07-11'),
-      ownerName: 'John Doe',
-      ownerEmail: 'johndoe@test.com',
-      emailsToInvite: ['johndoe@test.com'],
-    };
-  });
-
-  afterEach(() => {
-    vi.useRealTimers();
   });
 
   it('should be able to confirm a trip', async () => {
-    const { tripId } = await inMemoryTripRepository.createTrip(createTripDTO);
+    const { tripsData } = await makeTripsInMemoryFactory(
+      inMemoryTripRepository,
+      inMemoryParticipantRepository
+    );
+    const tripId = tripsData[0].id;
 
     await sut.execute(tripId);
 
@@ -45,15 +33,18 @@ describe('ConfirmTripUseCase', () => {
   });
 
   it('should not be able to confirm an inexistent trip', async () => {
-    await inMemoryTripRepository.createTrip(createTripDTO);
-
     await expect(() => sut.execute('invalid id')).rejects.toBeInstanceOf(
       TripNotFound
     );
   });
 
   it('should not be able to confirm an already confirmed trip', async () => {
-    const { tripId } = await inMemoryTripRepository.createTrip(createTripDTO);
+    const { tripsData } = await makeTripsInMemoryFactory(
+      inMemoryTripRepository,
+      inMemoryParticipantRepository
+    );
+    const tripId = tripsData[0].id;
+
     await inMemoryTripRepository.confirmTrip(tripId);
 
     await expect(() => sut.execute(tripId)).rejects.toBeInstanceOf(

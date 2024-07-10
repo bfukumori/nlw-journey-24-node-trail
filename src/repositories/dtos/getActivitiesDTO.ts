@@ -4,7 +4,7 @@ export type Activity = {
   id: string;
   title: string;
   occursAt: Date;
-  tripId: string;
+  tripId?: string;
 };
 
 export type GetActivitiesDTOResponse = {

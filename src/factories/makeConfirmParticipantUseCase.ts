@@ -1,10 +1,10 @@
-import { PrismaTripRepository } from '@/repositories/implementations/PrismaTripRepository.js';
+import { PrismaParticipantRepository } from '@/repositories/implementations/PrismaParticipantRepository.js';
 import { ConfirmParticipantUseCase } from '@/useCases/ConfirmParticipantUseCase.js';
 
 export async function makeConfirmParticipantUseCase() {
-  const tripRepository = new PrismaTripRepository();
+  const participantRepository = new PrismaParticipantRepository();
   const confirmParticipantUseCase = new ConfirmParticipantUseCase(
-    tripRepository
+    participantRepository
   );
 
   return confirmParticipantUseCase;

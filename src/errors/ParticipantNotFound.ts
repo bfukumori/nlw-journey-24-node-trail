@@ -1,4 +1,6 @@
-export class ParticipantNotFound extends Error {
+import { ClientError } from './client-error.js';
+
+export class ParticipantNotFound extends ClientError {
   code: number;
 
   constructor() {

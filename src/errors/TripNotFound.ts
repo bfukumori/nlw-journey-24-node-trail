@@ -1,4 +1,6 @@
-export class TripNotFound extends Error {
+import { ClientError } from './client-error.js';
+
+export class TripNotFound extends ClientError {
   code: number;
 
   constructor() {

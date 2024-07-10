@@ -33,12 +33,12 @@ export class CreateActivityUseCase {
       throw new InvalidDate('Activity date cannot be after trip end date');
     }
 
-    const { activityId } = await this.activityRepository.createActivity({
+    const activityId = await this.activityRepository.createActivity({
       title,
       occursAt,
       tripId,
     });
 
-    return { activityId };
+    return activityId;
   }
 }

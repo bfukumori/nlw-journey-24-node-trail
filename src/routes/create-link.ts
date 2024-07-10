@@ -1,8 +1,9 @@
 import { FastifyInstance } from 'fastify';
-import { z } from 'zod';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { makeCreateLinkUseCase } from '@/factories/makeCreateLinkUseCase.js';
+import { z } from 'zod';
+
 import { TripNotFound } from '@/errors/TripNotFound.js';
+import { makeCreateLinkUseCase } from '@/factories/makeCreateLinkUseCase.js';
 
 export async function createLink(fastify: FastifyInstance) {
   fastify.withTypeProvider<ZodTypeProvider>().post(

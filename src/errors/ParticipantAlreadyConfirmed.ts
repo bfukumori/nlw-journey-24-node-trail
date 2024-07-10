@@ -1,4 +1,6 @@
-export class ParticipantAlreadyConfirmed extends Error {
+import { ClientError } from './client-error.js';
+
+export class ParticipantAlreadyConfirmed extends ClientError {
   code: number;
 
   constructor() {

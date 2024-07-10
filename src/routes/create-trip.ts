@@ -1,8 +1,10 @@
 import { FastifyInstance } from 'fastify';
-import { z } from 'zod';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { makeCreateTripUseCase } from '@/factories/makeCreateTripUseCase.js';
+import { z } from 'zod';
+
+import { env } from '@/env/index.js';
 import { InvalidDate } from '@/errors/InvalidDate.js';
+import { makeCreateTripUseCase } from '@/factories/makeCreateTripUseCase.js';
 import { sendTripCreateEmail } from '@/lib/mail.js';
 
 export async function createTrip(fastify: FastifyInstance) {
@@ -42,7 +44,7 @@ export async function createTrip(fastify: FastifyInstance) {
           emailsToInvite: emails_to_invite,
         });
 
-        const confirmationLink = `http://localhost:3333/trips/${tripId}/confirm`;
+        const confirmationLink = `${env.API_BASE_URL}/trips/${tripId}/confirm`;
 
         await sendTripCreateEmail({
           destination,

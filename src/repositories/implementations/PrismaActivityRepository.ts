@@ -20,6 +20,11 @@ export class PrismaActivityRepository implements IActivityRepository {
       where: {
         trip_id: tripId,
       },
+      select: {
+        id: true,
+        title: true,
+        occurs_at: true,
+      },
       orderBy: {
         occurs_at: 'asc',
       },
@@ -30,7 +35,6 @@ export class PrismaActivityRepository implements IActivityRepository {
         id: activity.id,
         title: activity.title,
         occursAt: activity.occurs_at,
-        tripId: activity.trip_id,
       })),
     };
   }

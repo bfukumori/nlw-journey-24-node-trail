@@ -1,8 +1,7 @@
 import { TripNotFound } from '@/errors/TripNotFound.js';
-
+import { GetLinksDTOResponse } from '@/repositories/dtos/getLinksDTO.js';
 import { ILinkRepository } from '@/repositories/interfaces/ILinkRepository.js';
 import { ITripRepository } from '@/repositories/interfaces/ITripRepository.js';
-import { GetLinksDTOResponse } from '@/repositories/dtos/getLinksDTO.js';
 
 export class GetLinksUseCase {
   constructor(
@@ -17,8 +16,8 @@ export class GetLinksUseCase {
       throw new TripNotFound();
     }
 
-    const { links } = await this.linkRepository.getLinks(tripId);
+    const links = await this.linkRepository.getLinks(tripId);
 
-    return { links };
+    return links;
   }
 }

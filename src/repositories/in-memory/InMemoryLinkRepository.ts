@@ -1,10 +1,11 @@
 import { randomUUID } from 'node:crypto';
-import { ILinkRepository } from '../interfaces/ILinkRepository.js';
-import { GetLinksDTOResponse, Link } from '../dtos/getLinksDTO.js';
+
 import {
   CreateLinkDTORequest,
   CreateLinkDTOResponse,
 } from '../dtos/createLinkDTO.js';
+import { GetLinksDTOResponse, Link } from '../dtos/getLinksDTO.js';
+import { ILinkRepository } from '../interfaces/ILinkRepository.js';
 
 export class InMemoryLinkRepository implements ILinkRepository {
   private links: Link[] = [];
