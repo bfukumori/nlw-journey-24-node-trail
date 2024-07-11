@@ -1,0 +1,9 @@
+.github
+coverage
+node_modules
+.gitignore
+.dockerignore
+client.http
+docker-compose.yml
+Dockerfile
+README.md

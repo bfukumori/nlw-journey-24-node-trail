@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "tsx watch --env-file=.env src/server.ts",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "prisma:migrate": "npx prisma migrate dev",
+    "prisma:generate": "npx prisma generate"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

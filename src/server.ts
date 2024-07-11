@@ -72,7 +72,7 @@ fastify.register(createInvite);
 
 const start = async () => {
   try {
-    await fastify.listen({ port: PORT });
+    await fastify.listen({ port: PORT, host: '0.0.0.0' });
     fastify.swagger();
     console.log(`Server listening on port ${PORT}`);
   } catch (err) {

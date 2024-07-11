@@ -1,0 +1,15 @@
+services:
+  api:
+    platform: linux/x86_64
+    build: ./
+    environment:
+      NODE_ENV: development
+    ports:
+      - 3333:3333
+    env_file:
+      - .env
+    volumes:
+      - ./:/home/app/api
+      - /home/app/api/node_modules
+    working_dir: /home/app/api
+    restart: on-failure
