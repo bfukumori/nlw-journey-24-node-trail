@@ -1,3 +1,6 @@
+@tripId = {{getTrips.response.body.trips[0].id}}
+@participantId = {{getTrips.response.body.trips[0].participants[1].id}}
+
 # @name createTrip
 POST http://localhost:3333/trips HTTP/1.1
 content-type: application/json
@@ -19,20 +22,17 @@ GET http://localhost:3333/trips HTTP/1.1
 ###
 
 # @name getTripDetails
-@tripId = {{getTrips.response.body.trips[0].id}}
 GET http://localhost:3333/trips/{{tripId}} HTTP/1.1
 
 ###
 
 # @name confirmTrip
-@tripId = {{getTrips.response.body.trips[0].id}}
 
 GET http://localhost:3333/trips/{{tripId}}/confirm HTTP/1.1
 
 ###
 
 # @name updateTrip
-@tripId = {{getTrips.response.body.trips[0].id}}
 
 PUT http://localhost:3333/trips/{{tripId}} HTTP/1.1
 content-type: application/json
@@ -46,7 +46,6 @@ content-type: application/json
 ###
 
 # @name createActivity
-@tripId = {{getTrips.response.body.trips[0].id}}
 
 POST http://localhost:3333/trips/{{tripId}}/activities HTTP/1.1
 content-type: application/json
@@ -59,14 +58,12 @@ content-type: application/json
 ###
 
 # @name getActivities
-@tripId = {{getTrips.response.body.trips[0].id}}
 
 GET http://localhost:3333/trips/{{tripId}}/activities HTTP/1.1
 
 ###
 
 # @name createLink
-@tripId = {{getTrips.response.body.trips[0].id}}
 
 POST http://localhost:3333/trips/{{tripId}}/links HTTP/1.1
 content-type: application/json
@@ -79,34 +76,30 @@ content-type: application/json
 ###
 
 # @name getLinks
-@tripId = {{getTrips.response.body.trips[0].id}}
 
 GET http://localhost:3333/trips/{{tripId}}/links HTTP/1.1
 
 ###
 
 # @name getParticipants
-@tripId = {{getTrips.response.body.trips[0].id}}
 
 GET http://localhost:3333/trips/{{tripId}}/participants HTTP/1.1
 
 ###
 
 # @name getParticipantDetails
-@participantId = {{getParticipants.response.body.participants[0].id}}
 
 GET http://localhost:3333/participants/{{participantId}} HTTP/1.1
 
 ###
 
 # @name confirmParticipant
-@participantId = {{getTrips.response.body.trips[0].participants[1].id}}
+
 GET http://localhost:3333/participants/{{participantId}}/confirm HTTP/1.1
 
 ###
 
 # @name createInvite
-@tripId = {{getTrips.response.body.trips[0].id}}
 
 POST http://localhost:3333/trips/{{tripId}}/invites HTTP/1.1
 content-type: application/json

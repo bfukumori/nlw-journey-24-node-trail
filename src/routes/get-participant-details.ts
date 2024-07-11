@@ -3,7 +3,6 @@ import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 
 import { makeGetParticipantDetailsUseCase } from '@/factories/makeGetParticipantDetailsUseCase.js';
-import { ParticipantNotFound } from '@/errors/ParticipantNotFound.js';
 
 export async function getParticipantDetails(fastify: FastifyInstance) {
   fastify.withTypeProvider<ZodTypeProvider>().get(
@@ -20,7 +19,7 @@ export async function getParticipantDetails(fastify: FastifyInstance) {
             name: z.string().nullish(),
             email: z.string(),
           }),
-          400: z.object({
+          422: z.object({
             message: z.string(),
           }),
         },
@@ -34,19 +33,11 @@ export async function getParticipantDetails(fastify: FastifyInstance) {
       const getParticipantDetailsUseCase =
         await makeGetParticipantDetailsUseCase();
 
-      try {
-        const participant = await getParticipantDetailsUseCase.execute(
-          participantId
-        );
+      const participant = await getParticipantDetailsUseCase.execute(
+        participantId
+      );
 
-        return reply.code(200).send(participant);
-      } catch (error) {
-        if (error instanceof ParticipantNotFound) {
-          return reply.code(error.code).send({ message: error.message });
-        }
-
-        return reply.code(500).send({ message: 'Server error' });
-      }
+      return reply.code(200).send(participant);
     }
   );
 }

@@ -2,7 +2,6 @@ import { FastifyInstance } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 
-import { InvalidDate } from '@/errors/InvalidDate.js';
 import { makeCreateActivityUseCase } from '@/factories/makeCreateActivityUseCase.js';
 
 export async function createActivity(fastify: FastifyInstance) {
@@ -22,7 +21,7 @@ export async function createActivity(fastify: FastifyInstance) {
           201: z.object({
             activityId: z.string().uuid(),
           }),
-          400: z.object({
+          422: z.object({
             message: z.string(),
           }),
         },
@@ -35,21 +34,13 @@ export async function createActivity(fastify: FastifyInstance) {
 
       const createActivityUseCase = await makeCreateActivityUseCase();
 
-      try {
-        const { activityId } = await createActivityUseCase.execute({
-          title,
-          occursAt: occurs_at,
-          tripId,
-        });
+      const { activityId } = await createActivityUseCase.execute({
+        title,
+        occursAt: occurs_at,
+        tripId,
+      });
 
-        return reply.code(201).send({ activityId });
-      } catch (error) {
-        if (error instanceof InvalidDate) {
-          return reply.code(error.code).send({ message: error.message });
-        }
-
-        return reply.code(500).send({ message: 'Server error' });
-      }
+      return reply.code(201).send({ activityId });
     }
   );
 }

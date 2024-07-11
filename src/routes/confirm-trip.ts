@@ -4,7 +4,6 @@ import { z } from 'zod';
 
 import { env } from '@/env/index.js';
 import { TripAlreadyConfirmed } from '@/errors/TripAlreadyConfirmed.js';
-import { TripNotFound } from '@/errors/TripNotFound.js';
 import { makeConfirmTripUseCase } from '@/factories/makeConfirmTripUseCase.js';
 import { sendTripConfirmationEmail } from '@/lib/mail.js';
 
@@ -19,7 +18,7 @@ export async function confirmTrip(fastify: FastifyInstance) {
         tags: ['trips'],
         response: {
           200: z.void(),
-          400: z.object({
+          422: z.object({
             message: z.string(),
           }),
         },
@@ -50,15 +49,9 @@ export async function confirmTrip(fastify: FastifyInstance) {
         );
         return reply.redirect(`${env.WEB_BASE_URL}/trips/${tripId}`);
       } catch (error) {
-        if (error instanceof TripNotFound) {
-          return reply.code(error.code).send({ message: error.message });
-        }
-
         if (error instanceof TripAlreadyConfirmed) {
           return reply.redirect(`${env.WEB_BASE_URL}/trips/${tripId}`);
         }
-
-        return reply.code(500).send({ message: 'Server error' });
       }
     }
   );

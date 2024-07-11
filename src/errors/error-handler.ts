@@ -14,7 +14,7 @@ export const errorHandler: FastifyErrorHandler = async (error, _, reply) => {
   }
 
   if (error instanceof ClientError) {
-    return reply.status(400).send({
+    return reply.status(422).send({
       message: error.message,
     });
   }

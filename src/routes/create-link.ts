@@ -22,7 +22,7 @@ export async function createLink(fastify: FastifyInstance) {
           201: z.object({
             linkId: z.string(),
           }),
-          400: z.object({
+          422: z.object({
             message: z.string(),
           }),
         },
@@ -35,21 +35,13 @@ export async function createLink(fastify: FastifyInstance) {
 
       const createLinkUseCase = await makeCreateLinkUseCase();
 
-      try {
-        const { linkId } = await createLinkUseCase.execute({
-          title,
-          url,
-          tripId,
-        });
+      const { linkId } = await createLinkUseCase.execute({
+        title,
+        url,
+        tripId,
+      });
 
-        return reply.code(201).send({ linkId });
-      } catch (error) {
-        if (error instanceof TripNotFound) {
-          return reply.code(error.code).send({ message: error.message });
-        }
-
-        return reply.code(500).send({ message: 'Server error' });
-      }
+      return reply.code(201).send({ linkId });
     }
   );
 }

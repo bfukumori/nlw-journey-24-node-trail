@@ -2,8 +2,6 @@ import { FastifyInstance } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 
-import { InvalidDate } from '@/errors/InvalidDate.js';
-import { TripNotFound } from '@/errors/TripNotFound.js';
 import { makeUpdateTripUseCase } from '@/factories/makeUpdateTripUseCase.js';
 
 export async function updateTrip(fastify: FastifyInstance) {
@@ -22,7 +20,7 @@ export async function updateTrip(fastify: FastifyInstance) {
         tags: ['trips'],
         response: {
           204: z.void(),
-          400: z.object({
+          422: z.object({
             message: z.string(),
           }),
         },
@@ -35,26 +33,14 @@ export async function updateTrip(fastify: FastifyInstance) {
 
       const updateTripUseCase = await makeUpdateTripUseCase();
 
-      try {
-        await updateTripUseCase.execute({
-          destination,
-          startsAt: starts_at,
-          endsAt: ends_at,
-          tripId,
-        });
+      await updateTripUseCase.execute({
+        destination,
+        startsAt: starts_at,
+        endsAt: ends_at,
+        tripId,
+      });
 
-        return reply.code(204).send();
-      } catch (error) {
-        if (error instanceof TripNotFound) {
-          return reply.code(error.code).send({ message: error.message });
-        }
-
-        if (error instanceof InvalidDate) {
-          return reply.code(error.code).send({ message: error.message });
-        }
-
-        return reply.code(500).send({ message: 'Server error' });
-      }
+      return reply.code(204).send();
     }
   );
 }

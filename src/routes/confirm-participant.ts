@@ -18,7 +18,7 @@ export async function confirmParticipant(fastify: FastifyInstance) {
         tags: ['participants'],
         response: {
           200: z.void(),
-          400: z.object({
+          422: z.object({
             message: z.string(),
           }),
         },
@@ -37,15 +37,9 @@ export async function confirmParticipant(fastify: FastifyInstance) {
 
         return reply.redirect(`${env.WEB_BASE_URL}/trips/${tripId}`);
       } catch (error) {
-        if (error instanceof ParticipantNotFound) {
-          return reply.code(error.code).send({ message: error.message });
-        }
-
         if (error instanceof ParticipantAlreadyConfirmed) {
           return reply.redirect(`${env.WEB_BASE_URL}/trips`);
         }
-
-        return reply.code(500).send({ message: 'Server error' });
       }
     }
   );

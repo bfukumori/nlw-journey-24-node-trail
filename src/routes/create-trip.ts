@@ -3,7 +3,6 @@ import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 
 import { env } from '@/env/index.js';
-import { InvalidDate } from '@/errors/InvalidDate.js';
 import { makeCreateTripUseCase } from '@/factories/makeCreateTripUseCase.js';
 import { sendTripCreateEmail } from '@/lib/mail.js';
 
@@ -25,7 +24,7 @@ export async function createTrip(fastify: FastifyInstance) {
           201: z.object({
             tripId: z.string(),
           }),
-          400: z.object({
+          422: z.object({
             message: z.string(),
           }),
         },
@@ -44,35 +43,27 @@ export async function createTrip(fastify: FastifyInstance) {
 
       const createTripUseCase = await makeCreateTripUseCase();
 
-      try {
-        const { tripId } = await createTripUseCase.execute({
-          destination,
-          startsAt: starts_at,
-          endsAt: ends_at,
-          ownerName: owner_name,
-          ownerEmail: owner_email,
-          emailsToInvite: emails_to_invite,
-        });
+      const { tripId } = await createTripUseCase.execute({
+        destination,
+        startsAt: starts_at,
+        endsAt: ends_at,
+        ownerName: owner_name,
+        ownerEmail: owner_email,
+        emailsToInvite: emails_to_invite,
+      });
 
-        const confirmationLink = `${env.API_BASE_URL}/trips/${tripId}/confirm`;
+      const confirmationLink = `${env.API_BASE_URL}/trips/${tripId}/confirm`;
 
-        await sendTripCreateEmail({
-          destination,
-          startsAt: starts_at,
-          endsAt: ends_at,
-          ownerName: owner_name,
-          ownerEmail: owner_email,
-          confirmationLink,
-        });
+      await sendTripCreateEmail({
+        destination,
+        startsAt: starts_at,
+        endsAt: ends_at,
+        ownerName: owner_name,
+        ownerEmail: owner_email,
+        confirmationLink,
+      });
 
-        return reply.code(201).send({ tripId });
-      } catch (error) {
-        if (error instanceof InvalidDate) {
-          return reply.code(error.code).send({ message: error.message });
-        }
-
-        return reply.code(500).send({ message: 'Server error' });
-      }
+      return reply.code(201).send({ tripId });
     }
   );
 }

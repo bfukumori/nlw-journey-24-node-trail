@@ -33,7 +33,7 @@ export async function getTrips(fastify: FastifyInstance) {
                 ),
               })
             ),
-            total: z.number().int().positive(),
+            total: z.number().int().min(0),
           }),
         },
         summary: 'Get all trips',

@@ -33,7 +33,7 @@ export async function getTripDetails(fastify: FastifyInstance) {
               })
             ),
           }),
-          400: z.object({
+          422: z.object({
             message: z.string(),
           }),
         },
@@ -45,17 +45,9 @@ export async function getTripDetails(fastify: FastifyInstance) {
 
       const getTripDetailsUseCase = await makeGetTripDetailsUseCase();
 
-      try {
-        const trip = await getTripDetailsUseCase.execute(tripId);
+      const trip = await getTripDetailsUseCase.execute(tripId);
 
-        return reply.code(200).send(trip);
-      } catch (error) {
-        if (error instanceof TripNotFound) {
-          return reply.code(error.code).send({ message: error.message });
-        }
-
-        return reply.code(500).send({ message: 'Server error' });
-      }
+      return reply.code(200).send(trip);
     }
   );
 }

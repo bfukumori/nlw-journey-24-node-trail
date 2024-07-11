@@ -2,7 +2,6 @@ import { FastifyInstance } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 
-import { TripNotFound } from '@/errors/TripNotFound.js';
 import { makeGetLinksUseCase } from '@/factories/makeGetLinksUseCase.js';
 
 export async function getLinks(fastify: FastifyInstance) {
@@ -24,7 +23,7 @@ export async function getLinks(fastify: FastifyInstance) {
               })
             ),
           }),
-          400: z.object({
+          422: z.object({
             message: z.string(),
           }),
         },
@@ -36,17 +35,9 @@ export async function getLinks(fastify: FastifyInstance) {
 
       const getLinksUseCase = await makeGetLinksUseCase();
 
-      try {
-        const { links } = await getLinksUseCase.execute(tripId);
+      const { links } = await getLinksUseCase.execute(tripId);
 
-        return reply.code(200).send({ links });
-      } catch (error) {
-        if (error instanceof TripNotFound) {
-          return reply.code(error.code).send({ message: error.message });
-        }
-
-        return reply.code(500).send({ message: 'Server error' });
-      }
+      return reply.code(200).send({ links });
     }
   );
 }
