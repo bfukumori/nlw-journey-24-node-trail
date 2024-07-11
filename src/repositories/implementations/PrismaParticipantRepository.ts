@@ -35,7 +35,6 @@ export class PrismaParticipantRepository implements IParticipantRepository {
         id: true,
         email: true,
         name: true,
-        is_confirmed: true,
       },
     });
 
@@ -47,7 +46,6 @@ export class PrismaParticipantRepository implements IParticipantRepository {
       id: participant.id,
       name: participant.name,
       email: participant.email,
-      isConfirmed: participant.is_confirmed,
     };
   }
 

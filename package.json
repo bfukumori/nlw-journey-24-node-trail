@@ -8,6 +8,9 @@
     "test": "vitest",
     "coverage": "vitest run --coverage"
   },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "keywords": [
     "nlw",
     "node",
@@ -17,6 +20,7 @@
   "license": "ISC",
   "description": "Backend do app de planejamento de viagens da trilha de Node do NLW da Rocketseat",
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@types/node": "^20.14.10",
     "@types/nodemailer": "^6.4.15",
     "@vitest/coverage-v8": "^2.0.1",

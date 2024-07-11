@@ -20,6 +20,11 @@ export class PrismaLinkRepository implements ILinkRepository {
       where: {
         trip_id: tripId,
       },
+      select: {
+        id: true,
+        title: true,
+        url: true,
+      },
     });
 
     return {
@@ -27,7 +32,6 @@ export class PrismaLinkRepository implements ILinkRepository {
         id: link.id,
         title: link.title,
         url: link.url,
-        tripId: link.trip_id,
       })),
     };
   }
