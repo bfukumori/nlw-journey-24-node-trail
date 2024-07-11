@@ -19,7 +19,7 @@ Backend do Planner, uma aplicação de gerenciamento de viagens.
 - Criação de uma REST API utilizando Node e Fastify
 - Criação de testes unitários utilizando Vitest
 - Conexão com envio de emails utilizando Nodemailer
-- Conexão com banco de dados utlizando Prisma
+- Conexão com banco de dados utilizando Prisma
 - Validações utilizando Zod
 - Aplicações de princípios SOLID
 - Criação de documentação com Swagger
