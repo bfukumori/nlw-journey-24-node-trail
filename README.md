@@ -41,13 +41,13 @@ cd nlw-journey-24-node-trail
 ```
 
 2. Instale as dependências:
-   
+
 ```bash
 npm install
 ```
 
 3. Inicie a aplicação:
-   
+
 ```bash
 npm run dev
 ```
@@ -81,8 +81,15 @@ npm run test
 npm run coverage
 ```
 
+```bash
+# Roda a aplicação utilizando o Docker
+docker compose up -d
+```
+
 #### REST API
+
 O arquivo **client.http** possui as chamadas para os endpoint, caso você tenha a extensão do [REST Client instalada](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
 
 ## Documentação
+
 A documentação foi gerada com o Swagger e se encontra em http://localhost:3333/docs.
