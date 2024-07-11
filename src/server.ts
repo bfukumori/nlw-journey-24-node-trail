@@ -1,6 +1,9 @@
 import cors from '@fastify/cors';
+import fastifySwagger from '@fastify/swagger';
+import fastifySwaggerUI from '@fastify/swagger-ui';
 import Fastify from 'fastify';
 import {
+  jsonSchemaTransform,
   serializerCompiler,
   validatorCompiler,
 } from 'fastify-type-provider-zod';
@@ -32,6 +35,21 @@ fastify.register(cors, {
 fastify.setValidatorCompiler(validatorCompiler);
 fastify.setSerializerCompiler(serializerCompiler);
 
+fastify.register(fastifySwagger, {
+  swagger: {
+    info: {
+      title: 'Planner API documentation',
+      description: 'API documentation for the Planner app',
+      version: '1.0.0',
+    },
+  },
+  transform: jsonSchemaTransform,
+});
+
+fastify.register(fastifySwaggerUI, {
+  routePrefix: '/docs',
+});
+
 fastify.setErrorHandler(errorHandler);
 
 fastify.register(createTrip);
@@ -55,6 +73,7 @@ fastify.register(createInvite);
 const start = async () => {
   try {
     await fastify.listen({ port: PORT });
+    fastify.swagger();
     console.log(`Server listening on port ${PORT}`);
   } catch (err) {
     fastify.log.error(err);

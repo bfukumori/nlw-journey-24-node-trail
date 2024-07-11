@@ -6,6 +6,6 @@ export class TripAlreadyConfirmed extends ClientError {
   constructor() {
     super('Trip already confirmed');
     this.name = 'TripAlreadyConfirmed';
-    this.code = 422;
+    this.code = 400;
   }
 }

@@ -13,6 +13,27 @@ export async function getActivities(fastify: FastifyInstance) {
         params: z.object({
           tripId: z.string().uuid(),
         }),
+        tags: ['activities'],
+        response: {
+          200: z.object({
+            activities: z.array(
+              z.object({
+                date: z.date(),
+                activities: z.array(
+                  z.object({
+                    id: z.string().uuid(),
+                    title: z.string(),
+                    occursAt: z.date(),
+                  })
+                ),
+              })
+            ),
+          }),
+          400: z.object({
+            message: z.string(),
+          }),
+        },
+        summary: 'List all activities for a trip',
       },
     },
     async (request, reply) => {

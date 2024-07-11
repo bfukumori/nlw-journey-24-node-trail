@@ -6,6 +6,6 @@ export class TripNotFound extends ClientError {
   constructor() {
     super('Trip not found');
     this.name = 'TripNotFound';
-    this.code = 422;
+    this.code = 400;
   }
 }

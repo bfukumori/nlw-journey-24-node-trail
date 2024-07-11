@@ -6,6 +6,6 @@ export class ParticipantNotFound extends ClientError {
   constructor() {
     super('Participant not found');
     this.name = 'ParticipantNotFound';
-    this.code = 422;
+    this.code = 400;
   }
 }

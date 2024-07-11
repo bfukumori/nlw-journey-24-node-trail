@@ -12,6 +12,31 @@ export async function getTrips(fastify: FastifyInstance) {
         querystring: z.object({
           page: z.number().int().positive().default(1),
         }),
+        tags: ['trips'],
+        response: {
+          200: z.object({
+            trips: z.array(
+              z.object({
+                id: z.string().uuid(),
+                destination: z.string(),
+                startsAt: z.date(),
+                endsAt: z.date(),
+                createdAt: z.date(),
+                isConfirmed: z.boolean(),
+                participants: z.array(
+                  z.object({
+                    id: z.string().uuid(),
+                    name: z.string().nullish(),
+                    email: z.string(),
+                    isOwner: z.boolean().nullish(),
+                  })
+                ),
+              })
+            ),
+            total: z.number().int().positive(),
+          }),
+        },
+        summary: 'Get all trips',
       },
     },
     async (request, reply) => {

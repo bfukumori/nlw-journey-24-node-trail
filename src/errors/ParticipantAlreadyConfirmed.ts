@@ -6,6 +6,6 @@ export class ParticipantAlreadyConfirmed extends ClientError {
   constructor() {
     super('Participant already confirmed');
     this.name = 'ParticipantAlreadyConfirmed';
-    this.code = 422;
+    this.code = 400;
   }
 }

@@ -19,6 +19,14 @@ export async function createInvite(fastify: FastifyInstance) {
         body: z.object({
           email: z.string().email(),
         }),
+        tags: ['invites'],
+        response: {
+          200: z.void(),
+          400: z.object({
+            message: z.string(),
+          }),
+        },
+        summary: 'Create an invite for a participant',
       },
     },
     async (request, reply) => {

@@ -13,6 +13,31 @@ export async function getTripDetails(fastify: FastifyInstance) {
         params: z.object({
           tripId: z.string().uuid(),
         }),
+        tags: ['trips'],
+        response: {
+          200: z.object({
+            id: z.string().uuid(),
+            destination: z.string(),
+            startsAt: z.date(),
+            endsAt: z.date(),
+            createdAt: z.date(),
+            isConfirmed: z.boolean(),
+            participants: z.array(
+              z.object({
+                id: z.string().uuid(),
+                name: z.string().nullish(),
+                email: z.string(),
+                isConfirmed: z.boolean().nullish(),
+                isOwner: z.boolean().nullish(),
+                tripId: z.string().uuid().nullish(),
+              })
+            ),
+          }),
+          400: z.object({
+            message: z.string(),
+          }),
+        },
+        summary: 'Get details of a trip',
       },
     },
     async (request, reply) => {

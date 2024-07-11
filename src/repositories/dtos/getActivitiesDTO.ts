@@ -1,5 +1,3 @@
-import { Dayjs } from 'dayjs';
-
 export type Activity = {
   id: string;
   title: string;
@@ -13,7 +11,7 @@ export type GetActivitiesDTOResponse = {
 
 export type GetActivitiesDTOGroupedByDate = {
   activities: {
-    date: Dayjs;
+    date: Date;
     activities: Activity[];
   }[];
 };

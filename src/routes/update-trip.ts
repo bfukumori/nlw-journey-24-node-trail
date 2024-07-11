@@ -19,6 +19,14 @@ export async function updateTrip(fastify: FastifyInstance) {
           starts_at: z.coerce.date().optional(),
           ends_at: z.coerce.date().optional(),
         }),
+        tags: ['trips'],
+        response: {
+          204: z.void(),
+          400: z.object({
+            message: z.string(),
+          }),
+        },
+        summary: 'Update a trip',
       },
     },
     async (request, reply) => {

@@ -17,6 +17,16 @@ export async function createLink(fastify: FastifyInstance) {
           title: z.string().min(4),
           url: z.string().url(),
         }),
+        tags: ['links'],
+        response: {
+          201: z.object({
+            linkId: z.string(),
+          }),
+          400: z.object({
+            message: z.string(),
+          }),
+        },
+        summary: 'Create a link for a trip',
       },
     },
     async (request, reply) => {

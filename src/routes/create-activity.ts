@@ -17,6 +17,16 @@ export async function createActivity(fastify: FastifyInstance) {
           title: z.string().min(4),
           occurs_at: z.coerce.date(),
         }),
+        tags: ['activities'],
+        response: {
+          201: z.object({
+            activityId: z.string().uuid(),
+          }),
+          400: z.object({
+            message: z.string(),
+          }),
+        },
+        summary: 'Create an activity in a trip',
       },
     },
     async (request, reply) => {

@@ -16,6 +16,14 @@ export async function confirmTrip(fastify: FastifyInstance) {
         params: z.object({
           tripId: z.string().uuid(),
         }),
+        tags: ['trips'],
+        response: {
+          200: z.void(),
+          400: z.object({
+            message: z.string(),
+          }),
+        },
+        summary: 'Confirm a trip',
       },
     },
     async (request, reply) => {

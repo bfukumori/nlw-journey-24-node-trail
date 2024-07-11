@@ -20,6 +20,16 @@ export async function createTrip(fastify: FastifyInstance) {
           owner_email: z.string().email(),
           emails_to_invite: z.array(z.string().email()),
         }),
+        tags: ['trips'],
+        response: {
+          201: z.object({
+            tripId: z.string(),
+          }),
+          400: z.object({
+            message: z.string(),
+          }),
+        },
+        summary: 'Create a trip',
       },
     },
     async (request, reply) => {
